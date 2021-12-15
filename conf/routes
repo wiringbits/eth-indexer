@@ -1,0 +1,10 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# https://www.playframework.com/documentation/latest/ScalaRouting
+# ~~~~
+
+GET /health controllers.HealthController.check()
+GET /addresses/:address/transactions controllers.TransactionsController.findByAddress(address, limit: Int ?= 100, scrollId: Option[String])
+GET /prices/eth controllers.StatisticsController.getEthCurrency(currency: Option[String])
+GET /prices/weth controllers.StatisticsController.getWethCurrency(currency: Option[String])
+GET /prices/usdt controllers.StatisticsController.getUsdtCurrency(currency: Option[String])
