@@ -21,8 +21,9 @@ object BlocksRepository {
   type Id[T] = T
   trait Blocking extends BlocksRepository[Id]
 
-  class FutureImpl @Inject()(blocking: Blocking)(implicit ec: DatabaseExecutionContext)
+  class FutureImpl @Inject() (blocking: Blocking)(implicit ec: DatabaseExecutionContext)
       extends BlocksRepository[Future] {
+
     override def create(block: Block): Future[Unit] = Future {
       blocking.create(block)
     }

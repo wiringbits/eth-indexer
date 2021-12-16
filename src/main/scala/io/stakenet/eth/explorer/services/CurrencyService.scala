@@ -41,12 +41,12 @@ trait CurrencyService {
   def getMarketInformation(coinID: CoinID): Future[Either[CoinMarketCapError, MarketInformation]]
 }
 
-class CurrencyServiceCoinMarketCapImpl @Inject()(
+class CurrencyServiceCoinMarketCapImpl @Inject() (
     ws: WSClient,
     coinMarketCapConfig: CoinMarketCapConfig,
     retryConfig: RetryConfig
-)(
-    implicit ec: BlockingExecutionContext,
+)(implicit
+    ec: BlockingExecutionContext,
     scheduler: Scheduler
 ) extends CurrencyService {
 

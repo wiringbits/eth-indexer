@@ -21,6 +21,7 @@ import play.api.{Application, Configuration, Environment, Mode}
 import scala.concurrent.Future
 
 class TransactionsControllerSpec extends PlaySpec with DatabaseSpec {
+
   implicit val transactionStatusReads: Reads[TransactionStatus] = (status: JsValue) => {
     JsSuccess(TransactionStatus.withNameInsensitive(status.as[String]))
   }

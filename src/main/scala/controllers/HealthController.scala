@@ -7,8 +7,8 @@ import play.api.mvc.{AbstractController, ControllerComponents}
 import scala.concurrent.ExecutionContext
 import scala.util.Success
 
-class HealthController @Inject()(statisticsService: StatisticsService, cc: ControllerComponents)(
-    implicit ec: ExecutionContext
+class HealthController @Inject() (statisticsService: StatisticsService, cc: ControllerComponents)(implicit
+    ec: ExecutionContext
 ) extends AbstractController(cc) {
 
   def check() = Action.async { _ =>

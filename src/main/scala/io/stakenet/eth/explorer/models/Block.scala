@@ -22,6 +22,7 @@ trait Block {
 }
 
 object Block {
+
   case class WithoutTransactions(
       number: BigInt,
       hash: String,
