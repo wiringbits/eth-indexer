@@ -7,8 +7,8 @@ import play.api.mvc.{AbstractController, ControllerComponents}
 
 import scala.concurrent.ExecutionContext
 
-class StatisticsController @Inject()(statisticsService: StatisticsService, cc: ControllerComponents)(
-    implicit ec: ExecutionContext
+class StatisticsController @Inject() (statisticsService: StatisticsService, cc: ControllerComponents)(implicit
+    ec: ExecutionContext
 ) extends AbstractController(cc) {
 
   def getEthCurrency(currency: Option[String]) = Action.async { _ =>

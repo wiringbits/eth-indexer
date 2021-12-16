@@ -6,7 +6,7 @@ import io.stakenet.eth.explorer.repository.transactions.TransactionsRepository
 
 import scala.concurrent.Future
 
-class TransactionsService @Inject()(transactionsRepository: TransactionsRepository.FutureImpl) {
+class TransactionsService @Inject() (transactionsRepository: TransactionsRepository.FutureImpl) {
 
   def getPaginatedTransactions(address: String, startAfter: Option[String], limit: Int): Future[List[Transaction]] = {
     startAfter match {

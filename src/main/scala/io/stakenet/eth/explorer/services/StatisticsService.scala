@@ -11,7 +11,7 @@ import javax.inject.Inject
 import scala.concurrent.Future
 import scala.concurrent.duration._
 
-class StatisticsService @Inject()(
+class StatisticsService @Inject() (
     blocksRepository: BlocksRepository.FutureImpl,
     ethService: ETHService,
     ethCurrencySynchronizerActor: CurrencySynchronizerActor.EthRef,

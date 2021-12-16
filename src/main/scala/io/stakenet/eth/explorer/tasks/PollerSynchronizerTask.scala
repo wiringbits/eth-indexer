@@ -9,11 +9,11 @@ import scala.concurrent.ExecutionContext
 import scala.concurrent.duration.DurationInt
 import scala.util.{Failure, Success}
 
-class PollerSynchronizerTask @Inject()(
+class PollerSynchronizerTask @Inject() (
     ethService: ETHService,
     synchronizerService: SynchronizerService
-)(
-    implicit ec: ExecutionContext,
+)(implicit
+    ec: ExecutionContext,
     actorSystem: ActorSystem
 ) {
 

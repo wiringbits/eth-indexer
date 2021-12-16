@@ -13,12 +13,12 @@ trait LedgerSynchronizer {
   def synchronize(number: BigInt): Future[Unit]
 }
 
-class SynchronizerService @Inject()(
+class SynchronizerService @Inject() (
     ethService: ETHService,
     blocksRepository: BlocksRepository.FutureImpl,
     synchronizerConfig: SynchronizerConfig
-)(
-    implicit ec: ExecutionContext
+)(implicit
+    ec: ExecutionContext
 ) extends LedgerSynchronizer {
 
   private val logger = LoggerFactory.getLogger(this.getClass)
@@ -122,13 +122,12 @@ class SynchronizerService @Inject()(
   private def sync(range: NumericRange.Exclusive[BigInt]): Future[Unit] = {
     logger.info(s"Syncing block range = $range")
 
-    range.foldLeft[Future[Unit]](Future.unit) {
-      case (previous, number) =>
-        for {
-          _ <- previous
-          block <- fetchBlock(number)
-          _ <- synchronize(block)
-        } yield ()
+    range.foldLeft[Future[Unit]](Future.unit) { case (previous, number) =>
+      for {
+        _ <- previous
+        block <- fetchBlock(number)
+        _ <- synchronize(block)
+      } yield ()
     }
   }
 

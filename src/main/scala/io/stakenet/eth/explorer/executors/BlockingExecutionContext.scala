@@ -11,7 +11,7 @@ trait BlockingExecutionContext extends ExecutionContext
 object BlockingExecutionContext {
 
   @Singleton
-  class AkkaBased @Inject()(system: ActorSystem)
+  class AkkaBased @Inject() (system: ActorSystem)
       extends CustomExecutionContext(system, "blocking.dispatcher")
       with BlockingExecutionContext
 }

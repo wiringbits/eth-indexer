@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory
 import scala.concurrent.ExecutionContext
 import scala.util.{Failure, Success}
 
-class CurrencySynchronizerTask @Inject()(
+class CurrencySynchronizerTask @Inject() (
     config: CurrencySynchronizerConfig,
     actorSystem: ActorSystem,
     currencyService: CurrencyService,
