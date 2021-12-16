@@ -67,5 +67,5 @@ lazy val root = (project in file("."))
   .settings(
     name := "eth-indexer",
     libraryDependencies ++= Seq("org.web3j" % "core" % "5.0.0"),
-    libraryDependencies ++= Seq("com.beachape" %% "enumeratum" % "1.5.13")
+    libraryDependencies ++= Seq("com.beachape" %% "enumeratum" % "1.5.15")
   )
