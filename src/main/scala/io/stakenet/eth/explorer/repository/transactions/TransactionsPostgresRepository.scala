@@ -5,7 +5,8 @@ import io.stakenet.eth.explorer.repository.transactions.TransactionsRepository.I
 import javax.inject.Inject
 import play.api.db.Database
 
-class TransactionsPostgresRepository @Inject()(database: Database) extends TransactionsRepository.Blocking {
+class TransactionsPostgresRepository @Inject() (database: Database) extends TransactionsRepository.Blocking {
+
   override def findByAddress(address: String, limit: Int): Id[List[Transaction]] = {
     database.withConnection { implicit connection =>
       TransactionsDAO.findByAddress(address, limit)

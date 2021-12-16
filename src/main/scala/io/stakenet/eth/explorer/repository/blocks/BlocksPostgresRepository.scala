@@ -6,7 +6,7 @@ import io.stakenet.eth.explorer.repository.transactions.TransactionsDAO
 import javax.inject.Inject
 import play.api.db.Database
 
-class BlocksPostgresRepository @Inject()(database: Database) extends BlocksRepository.Blocking {
+class BlocksPostgresRepository @Inject() (database: Database) extends BlocksRepository.Blocking {
 
   def create(block: Block): Unit = {
     database.withTransaction { implicit conn =>

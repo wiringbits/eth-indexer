@@ -41,9 +41,9 @@ lazy val playSettings: Project => Project = {
         evolutions,
         jdbc,
         ws,
-        "com.google.inject" % "guice" % "4.1.0",
+        "com.google.inject" % "guice" % "4.2.3",
         "org.playframework.anorm" %% "anorm" % "2.6.10",
-        "org.postgresql" % "postgresql" % "42.2.6"
+        "org.postgresql" % "postgresql" % "42.2.24"
       )
     )
 }
@@ -67,5 +67,5 @@ lazy val root = (project in file("."))
   .settings(
     name := "eth-indexer",
     libraryDependencies ++= Seq("org.web3j" % "core" % "5.0.0"),
-    libraryDependencies ++= Seq("com.beachape" %% "enumeratum" % "1.5.13")
+    libraryDependencies ++= Seq("com.beachape" %% "enumeratum" % "1.5.15")
   )

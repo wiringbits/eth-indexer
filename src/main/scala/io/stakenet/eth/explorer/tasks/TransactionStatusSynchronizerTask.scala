@@ -15,7 +15,7 @@ import scala.concurrent.ExecutionContext
 import scala.concurrent.duration.DurationInt
 import scala.jdk.OptionConverters._
 
-class TransactionStatusSynchronizerTask @Inject()(
+class TransactionStatusSynchronizerTask @Inject() (
     database: Database,
     synchronizerConfig: SynchronizerConfig,
     ethClient: Web3j
