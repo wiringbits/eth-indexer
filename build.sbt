@@ -22,11 +22,11 @@ lazy val baseSettings: Project => Project = {
       "-Ywarn-value-discard",
       "-Ywarn-unused"
     ),
-    scalacOptions in (Compile, doc) ++= Seq(
+    (Compile / doc / scalacOptions) ++= Seq(
       "-no-link-warnings"
     ),
     // Some options are very noisy when using the console and prevent us using it smoothly, let's disable them
-    scalacOptions in (Compile, console) ~= (_ filterNot consoleDisabledOptions.contains)
+    (Compile / console / scalacOptions) ~= (_ filterNot consoleDisabledOptions.contains)
   )
 }
 
