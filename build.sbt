@@ -43,7 +43,7 @@ lazy val playSettings: Project => Project = {
         ws,
         "com.google.inject" % "guice" % "4.1.0",
         "org.playframework.anorm" %% "anorm" % "2.6.4",
-        "org.postgresql" % "postgresql" % "42.2.6"
+        "org.postgresql" % "postgresql" % "42.2.24"
       )
     )
 }
