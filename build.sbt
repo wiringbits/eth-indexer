@@ -56,8 +56,8 @@ lazy val testSettings: Project => Project = {
         "com.whisk" %% "docker-testkit-scalatest" % "0.11.0" % "test",
         "com.whisk" %% "docker-testkit-impl-spotify" % "0.9.9" % "test",
         "org.scalatestplus.play" %% "scalatestplus-play" % "5.1.0" % Test,
-        "org.mockito" %% "mockito-scala" % "1.14.8" % Test,
-        "org.mockito" %% "mockito-scala-scalatest" % "1.14.8" % Test
+        "org.mockito" %% "mockito-scala" % "1.16.49" % Test,
+        "org.mockito" %% "mockito-scala-scalatest" % "1.16.49" % Test
       )
     )
 }
