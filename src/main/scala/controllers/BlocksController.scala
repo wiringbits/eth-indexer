@@ -8,7 +8,7 @@ import play.api.mvc.{AbstractController, ControllerComponents}
 import javax.inject.Inject
 import scala.concurrent.ExecutionContext
 
-class BlocksController @Inject()(
+class BlocksController @Inject() (
     cc: ControllerComponents,
     blocksService: BlocksService
 )(implicit ec: ExecutionContext)

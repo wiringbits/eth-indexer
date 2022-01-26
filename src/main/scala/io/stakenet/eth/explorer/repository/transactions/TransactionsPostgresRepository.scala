@@ -5,7 +5,7 @@ import io.stakenet.eth.explorer.repository.transactions.TransactionsRepository.I
 import javax.inject.Inject
 import play.api.db.Database
 
-class TransactionsPostgresRepository @Inject()(database: Database) extends TransactionsRepository.Blocking {
+class TransactionsPostgresRepository @Inject() (database: Database) extends TransactionsRepository.Blocking {
   override def get(hash: String): Id[Option[Transaction]] = {
     database.withConnection { implicit conn =>
       TransactionsDAO.get(hash)

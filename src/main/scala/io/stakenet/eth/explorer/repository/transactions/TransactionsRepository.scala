@@ -17,7 +17,7 @@ object TransactionsRepository {
   type Id[T] = T
   trait Blocking extends TransactionsRepository[Id]
 
-  class FutureImpl @Inject()(blocking: Blocking)(implicit ec: DatabaseExecutionContext)
+  class FutureImpl @Inject() (blocking: Blocking)(implicit ec: DatabaseExecutionContext)
       extends TransactionsRepository[Future] {
     override def get(hash: String): Future[Option[Transaction]] = Future {
       blocking.get(hash)

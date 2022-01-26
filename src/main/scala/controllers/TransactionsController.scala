@@ -8,7 +8,7 @@ import play.api.mvc.{AbstractController, ControllerComponents}
 
 import scala.concurrent.ExecutionContext
 
-class TransactionsController @Inject()(
+class TransactionsController @Inject() (
     cc: ControllerComponents,
     transactionsService: TransactionsService
 )(implicit ec: ExecutionContext)

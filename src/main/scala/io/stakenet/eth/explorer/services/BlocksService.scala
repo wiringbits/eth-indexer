@@ -6,7 +6,7 @@ import io.stakenet.eth.explorer.repository.blocks.BlocksRepository
 
 import scala.concurrent.Future
 
-class BlocksService @Inject()(blocksRepository: BlocksRepository.FutureImpl) {
+class BlocksService @Inject() (blocksRepository: BlocksRepository.FutureImpl) {
 
   def getLatest(): Future[Option[Block]] = {
     blocksRepository.getLatestBlock()
