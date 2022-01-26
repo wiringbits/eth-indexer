@@ -8,7 +8,7 @@ import play.api.mvc.{AbstractController, ControllerComponents}
 
 import scala.concurrent.ExecutionContext
 
-class TransactionsController @Inject() (
+class TransactionsController @Inject()(
     cc: ControllerComponents,
     transactionsService: TransactionsService
 )(implicit ec: ExecutionContext)
@@ -22,6 +22,13 @@ class TransactionsController @Inject() (
       )
 
       Ok(result)
+    }
+  }
+
+  def get(hash: String) = Action.async { _ =>
+    transactionsService.getTransaction(hash).map {
+      case Some(transaction) => Ok(Json.toJson(transaction))
+      case None => NotFound("{}")
     }
   }
 }

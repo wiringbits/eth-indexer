@@ -138,4 +138,41 @@ class TransactionsPostgresRepositorySpec extends AnyWordSpec with DatabaseSpec {
       result mustBe List(transaction1)
     }
   }
+
+  "get" should {
+    "return a transaction" in {
+      val block = Helpers.randomBlock()
+      val transaction1 = Helpers
+        .randomTransaction()
+        .copy(blockNumber = block.number, blockHash = block.hash, timestamp = block.timestamp)
+      val transaction2 = Helpers
+        .randomTransaction()
+        .copy(blockNumber = block.number, blockHash = block.hash, timestamp = block.timestamp)
+      val transaction3 = Helpers
+        .randomTransaction()
+        .copy(blockNumber = block.number, blockHash = block.hash, timestamp = block.timestamp)
+      val transactions = List(transaction1, transaction2, transaction3)
+
+      blocksRepository.create(block.withTransactions(transactions))
+
+      transactions.map { transaction =>
+        val result = repository.get(transaction.hash)
+
+        result mustBe Some(transaction)
+      }
+    }
+
+    "return None when transaction does not exists" in {
+      val block = Helpers.randomBlock()
+      val transaction1 = Helpers.randomTransaction().copy(blockNumber = block.number, blockHash = block.hash)
+      val transaction2 = Helpers.randomTransaction().copy(blockNumber = block.number, blockHash = block.hash)
+      val transaction3 = Helpers.randomTransaction().copy(blockNumber = block.number, blockHash = block.hash)
+      val transactions = List(transaction1, transaction2, transaction3)
+
+      blocksRepository.create(block.withTransactions(transactions))
+
+      val result = repository.get(Helpers.randomHash())
+      result mustBe None
+    }
+  }
 }
