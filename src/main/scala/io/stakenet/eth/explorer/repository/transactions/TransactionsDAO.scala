@@ -67,6 +67,18 @@ object TransactionsDAO {
     }
   }
 
+  def get(hash: String)(implicit conn: Connection): Option[Transaction] = {
+    val result = SQL"""
+         SELECT t.hash, t.nonce, t.block_hash, t.block_number, t.transaction_index, t.from_address, t.to_address,
+           t.value, t.gas_price, t.gas, t.input, t.creates, t.public_key, t.raw, b.time AS timestamp, t.status
+         FROM transactions t
+         INNER JOIN blocks b USING(block_hash)
+         WHERE t.hash = $hash
+       """.as(TransactionParsers.transactionParser.singleOpt)
+
+    result
+  }
+
   def findByAddress(address: String, limit: Int)(implicit conn: Connection): List[Transaction] = {
     val result = SQL"""
          SELECT t.hash, t.nonce, t.block_hash, t.block_number, t.transaction_index, t.from_address, t.to_address,

@@ -24,4 +24,11 @@ class TransactionsController @Inject() (
       Ok(result)
     }
   }
+
+  def get(hash: String) = Action.async { _ =>
+    transactionsService.getTransaction(hash).map {
+      case Some(transaction) => Ok(Json.toJson(transaction))
+      case None => NotFound("{}")
+    }
+  }
 }

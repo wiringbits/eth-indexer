@@ -14,4 +14,8 @@ class TransactionsService @Inject() (transactionsRepository: TransactionsReposit
       case None => transactionsRepository.findByAddress(address, limit)
     }
   }
+
+  def getTransaction(hash: String): Future[Option[Transaction]] = {
+    transactionsRepository.get(hash)
+  }
 }

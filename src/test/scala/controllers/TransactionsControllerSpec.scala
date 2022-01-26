@@ -21,7 +21,6 @@ import play.api.{Application, Configuration, Environment, Mode}
 import scala.concurrent.Future
 
 class TransactionsControllerSpec extends PlaySpec with DatabaseSpec {
-
   implicit val transactionStatusReads: Reads[TransactionStatus] = (status: JsValue) => {
     JsSuccess(TransactionStatus.withNameInsensitive(status.as[String]))
   }
@@ -96,6 +95,30 @@ class TransactionsControllerSpec extends PlaySpec with DatabaseSpec {
     }
   }
 
+  "GET /transactions/:hash" should {
+    "return a transaction" in {
+      val transactionsRepository = new TransactionsPostgresRepository(database)
+      val application = getApplication(transactionsRepository)
+      val transaction = createTransaction(hash = "hash")
+
+      val result = GET(application, s"/transactions/hash")
+
+      status(result) mustBe OK
+      contentAsJson(result).as[Transaction] mustBe transaction
+    }
+
+    "return not found when transaction does not exists" in {
+      val transactionsRepository = new TransactionsPostgresRepository(database)
+      val application = getApplication(transactionsRepository)
+      createTransaction(hash = "hash")
+
+      val result = GET(application, s"/transactions/nope")
+
+      status(result) mustBe NOT_FOUND
+      contentAsString(result) mustBe "{}"
+    }
+  }
+
   private def GET(application: Application, url: String, extraHeaders: (String, String)*): Future[Result] = {
     val headers = (CONTENT_TYPE -> "application/json") :: extraHeaders.toList
     val request = FakeRequest("GET", url).withHeaders(headers: _*)
@@ -136,5 +159,22 @@ class TransactionsControllerSpec extends PlaySpec with DatabaseSpec {
     blocksRepository.create(block.withTransactions(transactions))
 
     transactions.sortBy(_.hash)
+  }
+
+  private def createTransaction(hash: String): Transaction = {
+    val blocksRepository = new BlocksPostgresRepository(database)
+    val block = Helpers.randomBlock()
+    val transaction = Helpers
+      .randomTransaction()
+      .copy(
+        hash = hash,
+        blockHash = block.hash,
+        blockNumber = block.number,
+        timestamp = block.timestamp
+      )
+
+    blocksRepository.create(block.withTransactions(List(transaction)))
+
+    transaction
   }
 }

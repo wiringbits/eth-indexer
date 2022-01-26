@@ -7,6 +7,7 @@ import javax.inject.Inject
 import scala.concurrent.Future
 
 trait TransactionsRepository[F[_]] {
+  def get(hash: String): F[Option[Transaction]]
   def findByAddress(address: String, limit: Int): F[List[Transaction]]
   def findByAddress(address: String, limit: Int, startAfter: String): F[List[Transaction]]
 }
@@ -18,6 +19,9 @@ object TransactionsRepository {
 
   class FutureImpl @Inject() (blocking: Blocking)(implicit ec: DatabaseExecutionContext)
       extends TransactionsRepository[Future] {
+    override def get(hash: String): Future[Option[Transaction]] = Future {
+      blocking.get(hash)
+    }
 
     override def findByAddress(address: String, limit: Int): Future[List[Transaction]] = Future {
       blocking.findByAddress(address, limit)
