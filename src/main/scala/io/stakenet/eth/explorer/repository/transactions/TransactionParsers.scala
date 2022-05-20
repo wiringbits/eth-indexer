@@ -25,6 +25,7 @@ private[transactions] object TransactionParsers {
     "public_key",
     "raw",
     "timestamp",
-    "status"
+    "status",
+    "confirmations"
   )
 }

@@ -70,7 +70,8 @@ object TransactionsDAO {
   def get(hash: String)(implicit conn: Connection): Option[Transaction] = {
     val result = SQL"""
          SELECT t.hash, t.nonce, t.block_hash, t.block_number, t.transaction_index, t.from_address, t.to_address,
-           t.value, t.gas_price, t.gas, t.input, t.creates, t.public_key, t.raw, b.time AS timestamp, t.status
+           t.value, t.gas_price, t.gas, t.input, t.creates, t.public_key, t.raw, b.time AS timestamp, t.status, 
+           (SELECT number FROM blocks ORDER BY number DESC LIMIT 1) - t.block_number AS confirmations
          FROM transactions t
          INNER JOIN blocks b USING(block_hash)
          WHERE t.hash = $hash
@@ -82,7 +83,8 @@ object TransactionsDAO {
   def findByAddress(address: String, limit: Int)(implicit conn: Connection): List[Transaction] = {
     val result = SQL"""
          SELECT t.hash, t.nonce, t.block_hash, t.block_number, t.transaction_index, t.from_address, t.to_address,
-           t.value, t.gas_price, t.gas, t.input, t.creates, t.public_key, t.raw, b.time AS timestamp, t.status
+           t.value, t.gas_price, t.gas, t.input, t.creates, t.public_key, t.raw, b.time AS timestamp, t.status, 
+           (SELECT number FROM blocks ORDER BY number DESC LIMIT 1) - t.block_number AS confirmations
          FROM transactions t
          INNER JOIN blocks b USING(block_hash)
          WHERE t.from_address = $address OR t.to_address = $address OR t.token_transfer_recipient = $address
@@ -100,7 +102,8 @@ object TransactionsDAO {
         WITH ranked AS (
            SELECT ROW_NUMBER() OVER(ORDER BY b.time DESC, t.hash ASC) AS rank, t.hash, t.nonce, t.block_hash,
              t.block_number, t.transaction_index, t.from_address, t.to_address, t.value, t.gas_price, t.gas, t.input,
-             t.creates, t.public_key, t.raw, b.time AS timestamp, t.status
+             t.creates, t.public_key, t.raw, b.time AS timestamp, t.status, 
+             (SELECT number FROM blocks ORDER BY number DESC LIMIT 1) - t.block_number AS confirmations
            FROM transactions t
            INNER JOIN blocks b USING(block_hash)
            WHERE t.from_address = $address OR t.to_address = $address OR t.token_transfer_recipient = $address
@@ -124,7 +127,9 @@ object TransactionsDAO {
          USING (SELECT time FROM blocks WHERE block_hash = $blockHash) b
          WHERE block_hash = $blockHash
          RETURNING hash, nonce, block_hash, block_number, transaction_index, from_address, to_address, value, gas_price,
-           gas, input, creates, public_key, raw, b.time AS timestamp, status
+           gas, input, creates, public_key, raw, b.time AS timestamp, status,              
+           (SELECT number FROM blocks ORDER BY number DESC LIMIT 1) - block_number AS confirmations
+
        """.as(TransactionParsers.transactionParser.*)
   }
 

@@ -256,7 +256,8 @@ class ETHServiceRPCImplSpec extends AsyncWordSpec with Matchers {
             publicKey = None,
             raw = None,
             timestamp = 1450323467,
-            Some(TransactionStatus.Success)
+            Some(TransactionStatus.Success),
+            confirmations = 0
           )
         )
 
