@@ -53,7 +53,8 @@ package object transformers {
       publicKey = Option(transaction.getPublicKey),
       raw = Option(transaction.getRaw),
       timestamp = timestamp,
-      status = status
+      status = status,
+      confirmations = 0
     )
   }
 }

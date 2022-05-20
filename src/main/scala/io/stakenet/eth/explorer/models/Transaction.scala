@@ -18,7 +18,8 @@ case class Transaction(
     publicKey: Option[String],
     raw: Option[String],
     timestamp: BigInt,
-    status: Option[TransactionStatus]
+    status: Option[TransactionStatus],
+    confirmations: BigInt
 ) {
 
   // see https://medium.com/swlh/understanding-data-payloads-in-ethereum-transactions-354dbe995371 for more information

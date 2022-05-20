@@ -48,9 +48,9 @@ class TransactionsPostgresRepositorySpec extends AnyWordSpec with DatabaseSpec {
       val twoDaysAgo = today.minus(2, ChronoUnit.DAYS)
       val address = Helpers.randomHash()
 
-      val block1 = Helpers.randomBlock().copy(timestamp = yesterday.toEpochMilli)
-      val block2 = Helpers.randomBlock().copy(timestamp = today.toEpochMilli)
-      val block3 = Helpers.randomBlock().copy(timestamp = twoDaysAgo.toEpochMilli)
+      val block1 = Helpers.randomBlock().copy(timestamp = yesterday.toEpochMilli, number = 2)
+      val block2 = Helpers.randomBlock().copy(timestamp = today.toEpochMilli, number = 3)
+      val block3 = Helpers.randomBlock().copy(timestamp = twoDaysAgo.toEpochMilli, number = 1)
 
       val transaction1 = Helpers
         .randomTransaction()
@@ -58,7 +58,8 @@ class TransactionsPostgresRepositorySpec extends AnyWordSpec with DatabaseSpec {
           from = address,
           blockNumber = block1.number,
           blockHash = block1.hash,
-          timestamp = block1.timestamp
+          timestamp = block1.timestamp,
+          confirmations = 1
         )
       val transaction2 = Helpers
         .randomTransaction()
@@ -66,7 +67,8 @@ class TransactionsPostgresRepositorySpec extends AnyWordSpec with DatabaseSpec {
           to = Some(address),
           blockNumber = block2.number,
           blockHash = block2.hash,
-          timestamp = block2.timestamp
+          timestamp = block2.timestamp,
+          confirmations = 0
         )
       val transaction3 = Helpers
         .randomTransaction()
@@ -74,7 +76,8 @@ class TransactionsPostgresRepositorySpec extends AnyWordSpec with DatabaseSpec {
           to = Some(address),
           blockNumber = block3.number,
           blockHash = block3.hash,
-          timestamp = block3.timestamp
+          timestamp = block3.timestamp,
+          confirmations = 2
         )
 
       blocksRepository.create(block1.withTransactions(List(transaction1)))
@@ -84,6 +87,66 @@ class TransactionsPostgresRepositorySpec extends AnyWordSpec with DatabaseSpec {
       val result = repository.findByAddress(address, limit = 100)
 
       result mustBe List(transaction2, transaction1, transaction3)
+    }
+
+    "get the correct value for confirmations" in {
+      val today = Instant.now
+      val yesterday = today.minus(1, ChronoUnit.DAYS)
+      val twoDaysAgo = today.minus(2, ChronoUnit.DAYS)
+      val threeDaysAgo = today.minus(3, ChronoUnit.DAYS)
+      val address = Helpers.randomHash()
+
+      val block1 = Helpers.randomBlock().copy(timestamp = threeDaysAgo.toEpochMilli, number = 1000)
+      val block2 = Helpers.randomBlock().copy(timestamp = today.toEpochMilli, number = 1003)
+      val block3 = Helpers.randomBlock().copy(timestamp = twoDaysAgo.toEpochMilli, number = 1001)
+      val block4 = Helpers.randomBlock().copy(timestamp = yesterday.toEpochMilli, number = 1002)
+
+      val transaction1 = Helpers
+        .randomTransaction()
+        .copy(
+          from = address,
+          blockNumber = block1.number,
+          blockHash = block1.hash,
+          timestamp = block1.timestamp,
+          confirmations = 3
+        )
+      val transaction2 = Helpers
+        .randomTransaction()
+        .copy(
+          to = Some(address),
+          blockNumber = block2.number,
+          blockHash = block2.hash,
+          timestamp = block2.timestamp,
+          confirmations = 0
+        )
+      val transaction3 = Helpers
+        .randomTransaction()
+        .copy(
+          to = Some(address),
+          blockNumber = block3.number,
+          blockHash = block3.hash,
+          timestamp = block3.timestamp,
+          confirmations = 2
+        )
+
+      val transaction4 = Helpers
+        .randomTransaction()
+        .copy(
+          to = Some(address),
+          blockNumber = block4.number,
+          blockHash = block4.hash,
+          timestamp = block4.timestamp,
+          confirmations = 1
+        )
+
+      blocksRepository.create(block1.withTransactions(List(transaction1)))
+      blocksRepository.create(block2.withTransactions(List(transaction2)))
+      blocksRepository.create(block3.withTransactions(List(transaction3)))
+      blocksRepository.create(block4.withTransactions(List(transaction4)))
+
+      val result = repository.findByAddress(address, limit = 100)
+
+      result mustBe List(transaction2, transaction4, transaction3, transaction1)
     }
 
     "get an empty list when address has no transactions" in {

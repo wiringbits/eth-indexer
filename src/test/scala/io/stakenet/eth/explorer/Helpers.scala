@@ -48,7 +48,8 @@ object Helpers {
       publicKey = Some(randomHash()),
       raw = Some(randomHash()),
       timestamp = Random.nextInt(),
-      status = Some(TransactionStatus.Success)
+      status = Some(TransactionStatus.Success),
+      confirmations = 0
     )
   }
 

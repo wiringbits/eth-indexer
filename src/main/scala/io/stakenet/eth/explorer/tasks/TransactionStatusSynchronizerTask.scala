@@ -75,14 +75,16 @@ class TransactionStatusSynchronizerTask @Inject() (
       "public_key",
       "raw",
       "timestamp",
-      "status"
+      "status",
+      "confirmations"
     )
 
     database.withConnection { implicit connection =>
       SQL"""
          SELECT
            t.hash, t.nonce, t.block_hash, t.block_number, t.transaction_index, t.from_address, t.to_address,
-           t.value, t.gas_price, t.gas, t.input, t.creates, t.public_key, t.raw, b.time AS timestamp, t.status
+           t.value, t.gas_price, t.gas, t.input, t.creates, t.public_key, t.raw, b.time AS timestamp, t.status, 
+           (SELECT block_number FROM transactions ORDER BY block_number DESC LIMIT 1) - block_number AS confirmations
          FROM transactions t
          INNER JOIN blocks b USING(block_hash)
          WHERE t.block_number = $number
